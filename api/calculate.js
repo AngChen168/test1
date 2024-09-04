@@ -15,6 +15,14 @@ module.exports = function handler(req, res) {
     } else {
         roots = 'No real roots';
     }
+    // 將計算過程和結果寫入日誌
+    console.log(`Equation: ${a}x² + ${b}x + ${c} = 0`);
+    console.log(`Discriminant: ${discriminant}`);
+    console.log(`Roots: ${JSON.stringify(roots)}`);
 
+    // 返回計算結果
+
+
+    
     res.status(200).json({ roots });
 };
