@@ -3,43 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>二次方程式求解器</title>
+    <title>Quadratic Equation Solver</title>
 </head>
 <body>
-    <h1>二次方程式求解器</h1>
-    <p>方程式形式：ax² + bx + c = 0</p>
-
+    <h1>Quadratic Equation Solver</h1>
+    <p>Equation: ax² + bx + c = 0</p>
     <label for="a">a:</label>
-    <input type="number" id="a" placeholder="輸入 a">
+    <input type="number" id="a" placeholder="Enter a">
     <br>
     <label for="b">b:</label>
-    <input type="number" id="b" placeholder="輸入 b">
+    <input type="number" id="b" placeholder="Enter b">
     <br>
     <label for="c">c:</label>
-    <input type="number" id="c" placeholder="輸入 c">
+    <input type="number" id="c" placeholder="Enter c">
     <br><br>
+    <button onclick="solveEquation()">Calculate</button>
+    <button onclick="clearInputs()">Clear</button> <!-- 新增的清除按鈕 -->
 
-    <button onclick="solveEquation()">計算</button>
-
-    <h3>結果：</h3>
+    <h3>Result:</h3>
     <p id="result"></p>
 
     <script>
+        // 計算方程式的函數
         async function solveEquation() {
             const a = document.getElementById('a').value;
             const b = document.getElementById('b').value;
             const c = document.getElementById('c').value;
 
-            const response = await fetch('https://test1-peach-psi.vercel.app/api/calculate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ a, b, c }),
-            });
+            try {
+                const response = await fetch('https://your-vercel-app.vercel.app/api/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ a: Number(a), b: Number(b), c: Number(c) }),
+                });
 
-            const data = await response.json();
-            document.getElementById('result').textContent = JSON.stringify(data.roots);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                document.getElementById('result').textContent = `Roots: ${JSON.stringify(data.roots)}`;
+            } catch (error) {
+                document.getElementById('result').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // 清除輸入與結果的函數
+        function clearInputs() {
+            document.getElementById('a').value = '';
+            document.getElementById('b').value = '';
+            document.getElementById('c').value = '';
+            document.getElementById('result').textContent = '';
         }
     </script>
 </body>
